@@ -334,11 +334,153 @@ function showNotification(message) {
   notification.textContent = message;
   notification.classList.add('show');
 
+  saveNotification(message);
+
   setTimeout(() => {
       notification.classList.remove('show');
   }, 3000);
 }
 
+function saveNotification(message) {
+  const notifications = JSON.parse(localStorage.getItem('notifications')) || [];
+  const newNotification = {
+    id: Date.now(),
+    message,
+    time: new Date().toLocaleString()
+  };
+  notifications.unshift(newNotification);
+  localStorage.setItem('notifications', JSON.stringify(notifications));
+}
+
 
 window.openCapsule = openCapsule;
 window.deleteCapsule = deleteCapsule;
+
+
+document.addEventListener('DOMContentLoaded', () => {
+  const feed = document.getElementById('notifications-feed');
+  let notifications = JSON.parse(localStorage.getItem('notifications')) || [];
+
+  function renderNotifications() {
+    if (notifications.length === 0) {
+      feed.innerHTML = `<p>No notifications yet.</p>`;
+      return;
+    }
+
+    feed.innerHTML = '';
+    notifications.forEach(n => {
+      const div = document.createElement('div');
+      div.className = 'notification-item';
+      div.innerHTML = `
+        <p class="message">${n.message}</p>
+        <p class="time">${n.time}</p>
+        <button class="delete-btn" data-id="${n.id}">Delete</button>
+      `;
+      feed.appendChild(div);
+    });
+
+    document.querySelectorAll('.delete-btn').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        const id = Number(e.target.getAttribute('data-id'));
+        notifications = notifications.filter(n => n.id !== id);
+        localStorage.setItem('notifications', JSON.stringify(notifications));
+        renderNotifications();
+      });
+    });
+  }
+
+  renderNotifications();
+});
+
+
+
+document.addEventListener('DOMContentLoaded', () => {
+  const feed = document.getElementById('capsule-feed');
+  const capsules = JSON.parse(localStorage.getItem('timeCapsules')) || [];
+
+  if (capsules.length === 0) {
+    feed.innerHTML = `<p>No capsules yet.</p>`;
+    return;
+  }
+
+  feed.innerHTML = '';
+
+  const now = new Date();
+
+  capsules.forEach(capsule => {
+    const createdDate = new Date(capsule.createdDate).toLocaleString();
+    const unlockDate = new Date(capsule.unlockDate);
+    const isUnlocked = now >= unlockDate;
+
+    let statusText, cssClass;
+
+    if (isUnlocked) {
+      statusText = `🔓 Unlocked on ${unlockDate.toLocaleString()}`;
+      cssClass = "unlocked";
+    } else {
+      const diffMs = unlockDate - now;
+      const days = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((diffMs / (1000 * 60 * 60)) % 24);
+      const minutes = Math.floor((diffMs / (1000 * 60)) % 60);
+
+      statusText = `🔒 Locked - Unlocks in ${days}d ${hours}h ${minutes}m`;
+      cssClass = "locked";
+    }
+
+    const div = document.createElement('div');
+    div.className = `capsule-item ${cssClass}`;
+    div.innerHTML = `
+      <p class="title">${capsule.title}</p>
+      <p class="status">${statusText}</p>
+      <p class="time">Created: ${createdDate}</p>
+    `;
+    feed.appendChild(div);
+  });
+});
+
+document.addEventListener('DOMContentLoaded', () => {
+  const feed = document.getElementById('unlocked-feed');
+  const capsules = JSON.parse(localStorage.getItem('timeCapsules')) || [];
+  const now = new Date();
+
+  const unlockedCapsules = capsules.filter(c => new Date(c.unlockDate) <= now);
+
+  if (unlockedCapsules.length === 0) {
+    feed.innerHTML = `<p>No unlocked capsules yet.</p>`;
+    return;
+  }
+
+  feed.innerHTML = '';
+  unlockedCapsules.forEach(capsule => {
+    const unlockDate = new Date(capsule.unlockDate).toLocaleString();
+    const createdDate = new Date(capsule.createdDate).toLocaleString();
+
+    const div = document.createElement('div');
+    div.className = 'capsule-item';
+    div.innerHTML = `
+      <p class="title">${capsule.title}</p>
+      <p class="message">${capsule.message}</p>
+      ${capsule.image ? `<img src="${capsule.image}" alt="Capsule Image">` : ""}
+      <p class="meta">Created: ${createdDate}</p>
+      <p class="meta">Unlocked on: ${unlockDate}</p>
+      <button class="delete-btn" data-id="${capsule.id}">Delete</button>
+    `;
+    feed.appendChild(div);
+  });
+
+  // Delete functionality
+  feed.addEventListener('click', (e) => {
+    if (e.target.classList.contains('delete-btn')) {
+      const id = e.target.getAttribute('data-id');
+      deleteCapsule(id);
+    }
+  });
+
+  function deleteCapsule(id) {
+    let capsules = JSON.parse(localStorage.getItem('timeCapsules')) || [];
+    capsules = capsules.filter(c => String(c.id) !== String(id));
+    localStorage.setItem('timeCapsules', JSON.stringify(capsules));
+    location.reload(); // refresh feed
+  }
+});
+
