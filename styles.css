@@ -846,16 +846,17 @@ body.homeBody {
   filter: none; 
   transform: scale(1.2);
 }
+
 .upcomingCapsules {
-  background: rgba(255, 255, 255, 0.05); 
+  /* background: rgba(255, 255, 255, 0.05);  */
   padding: 40px 20px;
-  backdrop-filter: blur(10px);
+  /* backdrop-filter: blur(10px); */
   text-align: center;
 }
 
 .upcomingCapsules h2 {
   font-size: 2rem;
-  margin-bottom: 20px;
+  margin-bottom: 70px;
   color: #3D91BD; 
 }
 
