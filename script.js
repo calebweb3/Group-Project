@@ -191,3 +191,159 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 });
+
+
+
+document.addEventListener('DOMContentLoaded', function() {
+    // Set minimum unlock date to tomorrow
+    const tomorrow = new Date();
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    const tomorrowFormatted = tomorrow.toISOString().split('T')[0];
+    document.getElementById('unlock-date').setAttribute('min', tomorrowFormatted);
+
+    // Load existing capsules
+    loadCapsules();
+
+   
+    document.getElementById('capsule-form').addEventListener('submit', function(e) {
+        e.preventDefault();
+
+        const title = document.getElementById('title').value;
+        const message = document.getElementById('message').value;
+        const unlockDate = document.getElementById('unlock-date').value;
+        const imageFile = document.getElementById('image').files[0];
+
+        // Capsule object
+        const capsule = {
+            id: Date.now(), // Unique ID
+            title,
+            message,
+            unlockDate,
+            createdDate: new Date().toISOString(),
+            image: null
+        };
+
+        // Handle image upload
+        if (imageFile) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                capsule.image = e.target.result;
+                saveCapsule(capsule);
+            };
+            reader.readAsDataURL(imageFile);
+        } else {
+            saveCapsule(capsule);
+        }
+    });
+});
+
+
+function saveCapsule(capsule) {
+    const capsules = JSON.parse(localStorage.getItem('timeCapsules')) || [];
+
+    capsules.push(capsule);
+    localStorage.setItem('timeCapsules', JSON.stringify(capsules));
+
+    loadCapsules();
+    showNotification('Time capsule created successfully!');
+
+    // Reset form
+    document.getElementById('capsule-form').reset();
+}
+
+
+function loadCapsules() {
+    const capsules = JSON.parse(localStorage.getItem('timeCapsules')) || [];
+    const capsuleList = document.getElementById('capsule-list');
+
+    if (capsules.length === 0) {
+        capsuleList.innerHTML = `
+            <div class="empty-state">
+                <p>You haven't created any time capsules yet.</p>
+                <p>Create your first one to get started!</p>
+            </div>
+        `;
+        return;
+    }
+
+    capsuleList.innerHTML = '';
+
+    capsules.forEach(capsule => {
+        const createdDate = new Date(capsule.createdDate).toLocaleDateString();
+        const unlockDate = new Date(capsule.unlockDate).toLocaleDateString();
+
+        const capsuleElement = document.createElement('div');
+        capsuleElement.className = 'capsule-item';
+        capsuleElement.innerHTML = `
+            <div class="capsule-title">${capsule.title}</div>
+            <div class="capsule-date">Created: ${createdDate} | Unlocks: ${unlockDate}</div>
+            <div class="capsule-message">${capsule.message}</div>
+            ${capsule.image ? `<img src="${capsule.image}" style="max-width: 100%; border-radius: 5px; margin-top: 10px;">` : ''}
+            <button onclick="openCapsule(${capsule.id})">View Capsule</button>
+            <button onclick="deleteCapsule(${capsule.id})" 
+                style="margin-left:10px; color:white; background:red; border:none; padding:5px 10px; border-radius:5px;">
+                Delete
+            </button>
+        `;
+
+        capsuleList.appendChild(capsuleElement);
+    });
+}
+
+function openCapsule(id) {
+    const capsules = JSON.parse(localStorage.getItem('timeCapsules')) || [];
+    const capsule = capsules.find(c => c.id === id);
+
+    if (!capsule) return;
+
+    const today = new Date();
+    const unlockDate = new Date(capsule.unlockDate);
+
+    if (today >= unlockDate) {
+        alert(`Time Capsule: ${capsule.title}\n\n${capsule.message}`);
+    } else {
+        const daysLeft = Math.ceil((unlockDate - today) / (1000 * 60 * 60 * 24));
+        alert(`This time capsule is still locked!\nIt will unlock in ${daysLeft} day${daysLeft !== 1 ? 's' : ''}.`);
+    }
+}
+
+
+function deleteCapsule(id) {
+    let capsules = JSON.parse(localStorage.getItem('timeCapsules')) || [];
+
+    
+    capsules = capsules.filter(c => Number(c.id) !== Number(id));
+
+    localStorage.setItem('timeCapsules', JSON.stringify(capsules));
+
+    loadCapsules();
+    showNotification('Time capsule deleted successfully!');
+
+    document.addEventListener('click', function(e) {
+        if (e.target.matches('.delete-button')) {
+            alert('Are you sure you want to delete this capsule? This action cannot be undone.');
+        }
+    });
+}
+
+
+
+
+// ========================
+// Notifications
+// ========================
+function showNotification(message) {
+    const notification = document.getElementById('notification');
+    notification.textContent = message;
+    notification.classList.add('show');
+
+    setTimeout(() => {
+        notification.classList.remove('show');
+    }, 3000);
+}
+
+// ========================
+// Expose Global Functions
+// ========================
+window.openCapsule = openCapsule;
+window.deleteCapsule = deleteCapsule;
