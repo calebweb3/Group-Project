@@ -5,38 +5,50 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Capsulr - Home</title>
   <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
 <body class="homeBody">
+  <header class="trackerHeader">
+    <div class="trackerLogo">
+      <img src="img/logo.png" alt="Time Capsule Logo">
+    </div>
+    <div class="profileSection">
+      <div class="iconCircle">
+        <a href="#"><img id="profileImage" src="img/defaultProfile.png" alt="Profile"></a>
+      </div>
+    </div>
+  </header>
 
   <section class="homeHero">
     <div class="overlay"></div>
-    <div class="hero-content">
-      <h1>Welcome to Capsulr</h1>
-      <p>Preserve your memories and open them when the time is right.</p>
-      <a href="create.html" class="btn">Create Capsule</a>
+    <div class="heroContent">
+      <h1 id="welcomeMessage">Welcome to Capsulr</h1>
+      <p>What memories will you unlock tomorrow?</p>
+      <a href="create.html" class="homeCreateBtn">Create Capsule</a>
     </div>
-<section class="upcomingCapsules">
-  <h2>Upcoming Capsules</h2>
-  <div class="capsuleCards">
-    <div class="capsuleCard">
-      <h3>Birthday Surprise</h3>
-      <p>Unlocks: 15 Sep 2025</p>
-    </div>
-    <div class="capsuleCard">
-      <h3>Graduation Message</h3>
-      <p>Unlocks: 01 Oct 2025</p>
-    </div>
-    <div class="capsuleCard">
-      <h3>Holiday Memory</h3>
-      <p>Unlocks: 25 Dec 2025</p>
-    </div>
-  </div> 
-</section>
-
+    
+    <section class="upcomingCapsules">
+      <h2>Upcoming Capsules</h2>
+      <div class="capsuleCards"></div> 
+    </section>
   </section>
-  <nav class="bottomNav">
-    <a href="home.html" class="active"> Home</a>
-  </nav>
 
+<nav class="bottomNav">
+  <a href="home.html" class="active">
+    <i class="fa-solid fa-home"></i>
+  </a>
+  <a href="tracker.html">
+    <i class="fa-solid fa-clock"></i>
+  </a>
+  <a href="notifications.html">
+    <i class="fa-solid fa-bell"></i>
+  </a>
+  <a href="share.html">
+    <i class="fa-solid fa-share-nodes"></i>
+  </a>
+</nav>
+
+
+  <script src="script.js"></script>
 </body>
 </html>

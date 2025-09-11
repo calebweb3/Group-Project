@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tracker - Time Capsule</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body class="trackerPage">
+
+  <header class="trackerHeader">
+    <div class="trackerLogo">
+      <img src="img/logo.png" alt="Time Capsule Logo">
+    </div>
+    <div class="profileSection">
+      <div class="iconCircle">
+        <a href="#"><img id="profileImage" src="img/defaultProfile.png" alt="Profile"></a>
+      </div>
+    </div>
+  </header>
+
+  <nav class="trackerNavBar">
+    <button class="navButton allCapsulesBtn">All Capsules</button>
+    <button class="navButton lockedCapsulesBtn">Locked</button>
+    <button class="navButton unlockedCapsulesBtn">Unlocked</button>
+  </nav>
+
+  <main class="trackerList"></main>
+
+  <nav class="bottomNav">
+    <a href="home.html" class="bottomNavItem">
+      <i class="fa-solid fa-home"></i>
+    </a>
+    <a href="tracker.html" class="bottomNavItem active">
+      <i class="fa-solid fa-clock"></i>
+    </a>
+    <a href="#" class="bottomNavItem">
+      <i class="fa-solid fa-bell"></i>
+    </a>
+    <a href="#" class="bottomNavItem shareIcon">
+      <i class="fa-solid fa-share-nodes"></i>
+    </a>
+  </nav>
+
+  <script src="script.js"></script>
+</body>
+</html>

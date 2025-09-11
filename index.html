@@ -12,8 +12,11 @@
     <div class="headerContainer">
       <nav class="navBar">
         <div class="logo"><img src="img/logo.png" alt="Logo"></div>
+        <div class="hamburger">
+          <i class="fa-solid fa-bars"></i>
+        </div>
         <ul class="nav-links">
-          <li><a href="#about">About</a></li>
+          <li><a href="about.html">About</a></li>
           <li><a href="#howItWorks">How It Works</a></li>
           <li><button class="btn login-btn"><a href="login.html">Login</a></button></li>
           <li><button class="btn primary-btn"><a href="signUp.html">Create Your Capsule</a></button></li>
@@ -31,7 +34,7 @@
       Save special moments and rediscover them later.
         </p>
         <p class="heroQuote">"What memory or wisdom do you want to be felt years from now?"</p>
-        <button class="btn cta-btn">Send Love Forward →</button>
+        <button class="btn cta-btn"><a href="login.html">Send Love Forward →</a></button>
         <p class="heroSubtitle"><a href="#howItWorks">Discover How the Magic Works</a></p>
         <ul class="heroList">
           <li>✓ Write a heartfelt note to be discovered in the future.</li>
@@ -83,7 +86,7 @@
           <div class="whyTraditional">
             <h3>Why Traditional Methods Fail</h3>
             <ul>
-               <li></li>Access Issues → Legal barriers hinder account retrieval after death.</li>
+               <li>Access Issues → Legal barriers hinder account retrieval after death.</li>
                <li>No Timing Control → Limited scheduling or delivery options for meaningful moments.</li>
                <li>Risk of Deletion → Inactive accounts may be permanently erased.</li>
                <li>Lacks Emotion → Focuses on storing files without capturing intentional timing or context.</li>
@@ -120,7 +123,7 @@
         </div>
       </div>
       <div class="journeyCTA">
-        <button class="btn primary-btn">Ready to Start Your Journey?</button>
+        <button class="btn primary-btn"><a href="signUp.html">Ready to Start Your Journey?</a></button>
       </div>
     </section>
 
@@ -157,62 +160,13 @@
 
     <section class="ctaSection" id="create">
       <h2 class="ctaTitle">Preserve Your Moments Today</h2>
-      <button class="btn ctaBtn" onclick="showSignup()">Create Your Capsule</button>
+      <button class="btn ctaBtn"><a href="login.html">Create Your Capsule</a></button>
       <p class="ctaText">
         <span>Find Your Perfect Moment – Create Your Time Capsule Today!</span>
       </p>
     </section>
   </main>
-  <section id="loginSection">
-     <main class="mainContent">
-    <div class="wrapper hidden">
-      <h1>Login</h1>
-      <form id="loginForm">
-        <div class="input-box">
-          <input type="text" id="loginEmail" placeholder="Email or Username" required>
-          <i class="fas fa-user"></i>
-        </div>
-        <div class="input-box">
-          <input type="password" id="loginPassword" placeholder="Password" required>
-          <i class="fas fa-lock"></i>
-        </div>
-        <div class="remember-forgot">
-          <label><input type="checkbox"> Remember me</label>
-          <a href="#">Forgot password?</a>
-        </div>
-        <button type="submit" class="button">Login</button>
-        <div class="register-link">
-          <p>Don’t have an account? <a onclick="showSignup()">Sign Up</a></p>
-        </div>
-      </form>
-    </div>
-    </section>
-
-    <section id="signupSection">
-          <div class="wrapper hidden">
-            <h1>Sign Up</h1>
-              <form id="signupForm">
-                <div class="input-box">
-                  <input type="text" id="signupUsername" placeholder="Username" required>
-                  <i class="fas fa-user"></i>
-                </div>
-                <div class="input-box">
-                  <input type="email" id="signupEmail" placeholder="Email" required>
-                  <i class="fas fa-envelope"></i>
-                </div>
-                <div class="input-box">
-                  <input type="password" id="signupPassword" placeholder="Password" required>
-                  <i class="fas fa-lock"></i>
-                </div>
-                <button type="submit" class="button">Sign Up</button>
-                <div class="register-link">
-                    <p>Already have an account? <a href="login.html">Login</a></p>
-                </div>
-              </form>
-            </div>
-          </section>
-      </main>
 </body>
-  <script src="scripts.js"></script>
+  <script src="script.js"></script>
 
 
