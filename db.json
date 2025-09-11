@@ -1,5 +1,18 @@
 {
-  "users": [],
+  "users": [
+    {
+      "id": "fb63",
+      "username": "Caleb",
+      "email": "Caleb@gmail.com",
+      "password": "1234"
+    },
+    {
+      "id": "0bcc",
+      "username": "Fatima",
+      "email": "testexample@gmail.com",
+      "password": "1234"
+    }
+  ],
   "capsules": [],
   "profileImage": "img/defaultProfile.png"
 }
