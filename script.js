@@ -1,5 +1,4 @@
 const apiURL = "http://localhost:5500/users";
-
 document.addEventListener("DOMContentLoaded", () => {
   const hamburger = document.querySelector(".hamburger");
   const navLinks = document.querySelector(".nav-links");
@@ -10,8 +9,6 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 });
-
-
 const signupForm = document.getElementById("signupForm");
 if (signupForm) {
   signupForm.addEventListener("submit", function (e) {
@@ -195,26 +192,28 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 });
 
+
+
 document.addEventListener('DOMContentLoaded', function() {
-    // Set minimum unlock date to tomorrow
+    
     const tomorrow = new Date();
     tomorrow.setDate(tomorrow.getDate() + 1);
     const tomorrowFormatted = tomorrow.toISOString().split('T')[0];
     document.getElementById('unlock-date').setAttribute('min', tomorrowFormatted);
 
-    // Load existing capsules
+    
     loadCapsules();
 
    
     document.getElementById('capsule-form').addEventListener('submit', function(e) {
         e.preventDefault();
 
-            const title = document.getElementById('title').value;
-            const message = document.getElementById('message').value;
-            const unlockDate = document.getElementById('unlock-date').value;
-            const imageFile = document.getElementById('image').files[0];
+        const title = document.getElementById('title').value;
+        const message = document.getElementById('message').value;
+        const unlockDate = document.getElementById('unlock-date').value;
+        const imageFile = document.getElementById('image').files[0];
 
-        // Capsule object
+        
         const capsule = {
             id: Date.now(), // Unique ID
             title,
@@ -224,7 +223,7 @@ document.addEventListener('DOMContentLoaded', function() {
             image: null
         };
 
-        // Handle image upload
+        
         if (imageFile) {
             const reader = new FileReader();
             reader.onload = function(e) {
@@ -238,22 +237,24 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
+
 function saveCapsule(capsule) {
     const capsules = JSON.parse(localStorage.getItem('timeCapsules')) || [];
+
     capsules.push(capsule);
     localStorage.setItem('timeCapsules', JSON.stringify(capsules));
+
     loadCapsules();
     showNotification('Time capsule created successfully!');
 
-    // Reset form
+  
     document.getElementById('capsule-form').reset();
 }
 
-function loadCapsules() {
-    const capsuleList = document.getElementById('capsule-list');
-    if (!capsuleList) return; 
 
+function loadCapsules() {
     const capsules = JSON.parse(localStorage.getItem('timeCapsules')) || [];
+    const capsuleList = document.getElementById('capsule-list');
 
     if (capsules.length === 0) {
         capsuleList.innerHTML = `
@@ -277,12 +278,14 @@ function loadCapsules() {
             <div class="capsule-title">${capsule.title}</div>
             <div class="capsule-date">Created: ${createdDate} | Unlocks: ${unlockDate}</div>
             <div class="capsule-message">${capsule.message}</div>
-            ${capsule.image ? `<img src="${capsule.image}" style="max-width:100%; border-radius:5px; margin-top:10px;">` : ''}
+            ${capsule.image ? `<img src="${capsule.image}" style="max-width: 100%; border-radius: 5px; margin-top: 10px;">` : ''}
             <button onclick="openCapsule(${capsule.id})">View Capsule</button>
-            <button onclick="deleteCapsule(${capsule.id})" style="margin-left:10px; color:white; background:red; border:none; padding:5px 10px; border-radius:5px;">
+            <button onclick="deleteCapsule(${capsule.id})" 
+                style="margin-left:10px; color:white; background:red; border:none; padding:5px 10px; border-radius:5px;">
                 Delete
             </button>
         `;
+
         capsuleList.appendChild(capsuleElement);
     });
 }
@@ -290,6 +293,7 @@ function loadCapsules() {
 function openCapsule(id) {
     const capsules = JSON.parse(localStorage.getItem('timeCapsules')) || [];
     const capsule = capsules.find(c => c.id === id);
+
     if (!capsule) return;
 
     const today = new Date();
@@ -303,11 +307,13 @@ function openCapsule(id) {
     }
 }
 
-function deleteCapsule(id) {
-    if (!confirm('Are you sure you want to delete this capsule? This action cannot be undone.')) return;
 
+function deleteCapsule(id) {
     let capsules = JSON.parse(localStorage.getItem('timeCapsules')) || [];
+
+    
     capsules = capsules.filter(c => Number(c.id) !== Number(id));
+
     localStorage.setItem('timeCapsules', JSON.stringify(capsules));
 
     loadCapsules();
@@ -323,12 +329,9 @@ function deleteCapsule(id) {
 
 
 
-// ========================
-// Notifications
-// ========================
+
 function showNotification(message) {
     const notification = document.getElementById('notification');
-    if (!notification) return;
     notification.textContent = message;
     notification.classList.add('show');
 
@@ -337,8 +340,6 @@ function showNotification(message) {
     }, 3000);
 }
 
-// ========================
-// Expose Global Functions
-// ========================
+
 window.openCapsule = openCapsule;
 window.deleteCapsule = deleteCapsule;
