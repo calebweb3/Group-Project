@@ -28,7 +28,6 @@ document.addEventListener("DOMContentLoaded", () => {
   if (lockedBtn) lockedBtn.addEventListener("click", () => loadTrackerCapsules(trackerList, "locked"));
   if (unlockedBtn) unlockedBtn.addEventListener("click", () => loadTrackerCapsules(trackerList, "unlocked"));
 
-  // Tracker Search Input
   const searchInput = document.getElementById("trackerSearchInput");
   if (searchInput) {
     searchInput.addEventListener("input", () => {
@@ -49,6 +48,7 @@ document.addEventListener("DOMContentLoaded", () => {
   if (capsuleForm) capsuleForm.addEventListener('submit', handleNewCapsule);
 
   loadHomeCapsules();
+  loadNotifications();
 });
 
 function handleSignup(e) {
@@ -57,6 +57,7 @@ function handleSignup(e) {
   const email = document.getElementById("email").value.trim();
   const password = document.getElementById("password").value.trim();
   const confirmPassword = document.getElementById("confirmPassword").value.trim();
+
   if (!username || !email || !password || !confirmPassword) return alert("All fields are required!");
   if (password !== confirmPassword) return alert("Passwords do not match!");
 
@@ -106,7 +107,6 @@ function loadProfile(img) {
     .catch(err => console.error(err));
 }
 
-// Updated loadTrackerCapsules with optional searchQuery
 function loadTrackerCapsules(container, filter = "all", searchQuery = "") {
   if (!container) return;
   fetch(`${apiURL}/capsules`)
@@ -146,12 +146,6 @@ function loadTrackerCapsules(container, filter = "all", searchQuery = "") {
     });
 }
 
-function handleShare() {
-  const url = window.location.href;
-  navigator.clipboard.writeText(url).then(() => alert("Link copied to clipboard!")).catch(() => alert("Failed to copy link."));
-  if (navigator.share) navigator.share({ title: 'Time Capsule', text: 'Check out my capsule!', url }).catch(err => console.error(err));
-}
-
 function handleNewCapsule(e) {
   e.preventDefault();
   const title = document.getElementById('title').value;
@@ -175,7 +169,8 @@ function postCapsule(capsule) {
   })
   .then(res => res.json())
   .then(() => {
-    showNotification("Time capsule created successfully!", 5000); 
+    addNotification(`New capsule '${capsule.title}' has been created!`);
+    showToast("Time capsule created successfully!"); 
     const form = document.getElementById('capsule-form'); 
     if (form) form.reset();
     loadHomeCapsules();
@@ -201,7 +196,6 @@ function loadHomeCapsules() {
         capsuleContainer.innerHTML = `<p style="text-align:center;color:#50504C;margin-top:20px;">No upcoming capsules yet.</p>`;
         return;
       }
-
       upcoming.forEach(c => {
         const unlockDate = new Date(c.unlockDate);
         const card = document.createElement('div');
@@ -224,8 +218,12 @@ function openCapsule(id) {
     .then(c => {
       const today = new Date();
       const unlock = new Date(c.unlockDate);
-      if (today >= unlock) alert(`Time Capsule: ${c.title}\n\n${c.message}`);
-      else alert(`This time capsule is still locked!\nIt will unlock in ${Math.ceil((unlock-today)/(1000*60*60*24))} day${Math.ceil((unlock-today)/(1000*60*60*24)) !== 1 ? 's' : ''}.`);
+      if (today >= unlock) {
+        alert(`Time Capsule: ${c.title}\n\n${c.message}`);
+        addNotification(`Capsule '${c.title}' was unlocked!`);
+      } else {
+        alert(`This time capsule is still locked!\nIt will unlock in ${Math.ceil((unlock-today)/(1000*60*60*24))} day${Math.ceil((unlock-today)/(1000*60*60*24)) !== 1 ? 's' : ''}.`);
+      }
     })
     .catch(err => console.error(err));
 }
@@ -233,60 +231,94 @@ function openCapsule(id) {
 function deleteCapsule(id) {
   fetch(`${apiURL}/capsules/${id}`, { method: "DELETE" })
     .then(() => {
-      showNotification("Time capsule deleted successfully!", 5000);
+      addNotification(`Capsule was deleted!`);
+      showToast("Time capsule deleted successfully!");
       loadHomeCapsules();
       const trackerList = document.querySelector(".trackerList");
       if (trackerList) loadTrackerCapsules(trackerList, "all");
     })
     .catch(err => console.error(err));
 }
+function loadNotifications() {
+  const feed = document.getElementById("notifications-feed");
+  if (!feed) return;
 
-function showNotification(msg, duration = 5000) {
-  const n = document.getElementById('notification'); 
-  if (!n) return;
-  n.textContent = msg; 
-  n.classList.add('show');
+  fetch(`${apiURL}/notifications`)
+    .then(res => res.json())
+    .then(notifications => {
+      feed.innerHTML = "";
+      if (!notifications.length) {
+        feed.innerHTML = "<p>No notifications yet.</p>";
+        return;
+      }
 
-  if (n.hideTimeout) clearTimeout(n.hideTimeout);
+      notifications.forEach(n => {
+        const notif = document.createElement("div");
+        notif.className = `notification-item ${n.type || 'system'}`;
+        notif.innerHTML = `
+          <div class="icon"></div>
+          <div class="message">${n.message}</div>
+          <div style="display:flex; align-items:center;">
+            <span class="time">${new Date(n.date).toLocaleString()}</span>
+            <button class="delete-btn" onclick="deleteNotification('${n.id}')">Delete</button>
+          </div>
+        `;
+        feed.appendChild(notif);
+      });
+    })
+    .catch(err => {
+      feed.innerHTML = "<p>Error loading notifications.</p>";
+      console.error(err);
+    });
+}
 
-  n.hideTimeout = setTimeout(() => {
-    n.classList.remove('show');
+function addNotification(message, type = 'system') {
+  fetch(`${apiURL}/notifications`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ message, type, date: new Date().toISOString() })
+  })
+  .then(() => loadNotifications())
+  .catch(err => console.error(err));
+}
+
+function deleteNotification(id) {
+  fetch(`${apiURL}/notifications/${id}`, { method: "DELETE" })
+    .then(() => loadNotifications())
+    .catch(err => console.error(err));
+}
+
+function showToast(message, duration = 4000) {
+  const toast = document.createElement("div");
+  toast.className = "notification-toast";
+  toast.textContent = message;
+  document.body.appendChild(toast);
+  setTimeout(() => toast.classList.add("show"), 50);
+  setTimeout(() => {
+    toast.classList.remove("show");
+    setTimeout(() => document.body.removeChild(toast), 300);
   }, duration);
+}
+function handleShare() {
+  const url = window.location.href;
+  navigator.clipboard.writeText(url).then(() => alert("Link copied to clipboard!")).catch(() => alert("Failed to copy link."));
+  if (navigator.share) navigator.share({ title: 'Time Capsule', text: 'Check out my capsule!', url }).catch(err => console.error(err));
 }
 
 function shareCapsule(id) {
   const url = `${window.location.origin}/capsule.html?id=${id}`;
-  navigator.clipboard.writeText(url)
-    .then(() => alert("Capsule link copied!"))
-    .catch(() => alert("Failed to copy link."));
-
-  if (navigator.share) {
-    navigator.share({ 
-      title: 'Time Capsule', 
-      text: 'Check out this capsule!', 
-      url 
-    }).catch(err => console.error(err));
-  }
+  navigator.clipboard.writeText(url).then(() => alert("Capsule link copied!")).catch(() => alert("Failed to copy link."));
+  if (navigator.share) navigator.share({ title: 'Time Capsule', text: 'Check out this capsule!', url }).catch(err => console.error(err));
 }
 
 const navShareBtn = document.getElementById("navShareBtn");
 if (navShareBtn) {
   navShareBtn.addEventListener("click", () => {
-    const url = window.location.href; 
-    navigator.clipboard.writeText(url)
-      .then(() => alert("Page link copied!"))
-      .catch(() => alert("Failed to copy link."));
-
-    if (navigator.share) {
-      navigator.share({ 
-        title: 'Time Capsule', 
-        text: 'Check out this page!', 
-        url 
-      }).catch(err => console.error(err));
-    }
+    const url = window.location.href;
+    navigator.clipboard.writeText(url).then(() => alert("Page link copied!")).catch(() => alert("Failed to copy link."));
+    if (navigator.share) navigator.share({ title: 'Time Capsule', text: 'Check out this page!', url }).catch(err => console.error(err));
   });
 }
-
 window.openCapsule = openCapsule;
 window.deleteCapsule = deleteCapsule;
-
+window.shareCapsule = shareCapsule;

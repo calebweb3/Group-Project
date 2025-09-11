@@ -1027,8 +1027,6 @@ body.trackerPage {
   object-fit: cover;
   border: 2px solid #3D91BD;
 }
-
-/* Tracker NavBar */
 .trackerNavBar {
   display: flex;
   justify-content: space-between;
@@ -1198,3 +1196,59 @@ body.trackerPage {
     padding: 12px;
   }
 }
+.notification-container {
+  max-width: 90%;
+  margin: 40px auto;
+  padding: 20px;
+  font-family: Arial, sans-serif;
+}
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.notifications-feed {
+  margin-top: 70px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  width: 100%;
+}
+.notification-item {
+  display: flex;
+  flex-direction: column;
+  background: linear-gradient(135deg, #357abd, #3d91bd);
+  padding: 14px 16px;
+  border-radius: 12px;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  cursor: pointer;
+}
+.notification-item:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(0,0,0,0.12);
+}
+.notification-item .message {
+  font-weight: bold;
+  color: #252523;
+  margin-bottom: 6px;
+}
+.notification-item .time {
+  font-size: 0.85rem;
+  color: #252523;
+}
+.delete-btn {
+  background: #dc3545;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  transition: background 0.2s ease;
+  margin-left: auto;
+}
+.delete-btn:hover {
+  background: darkred;
+}
+
