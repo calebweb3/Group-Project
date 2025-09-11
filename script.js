@@ -196,49 +196,46 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 document.addEventListener('DOMContentLoaded', function() {
-    const unlockInput = document.getElementById('unlock-date');
-    if (unlockInput) {
-        const tomorrow = new Date();
-        tomorrow.setDate(tomorrow.getDate() + 1);
-        const tomorrowFormatted = tomorrow.toISOString().split('T')[0];
-        unlockInput.setAttribute('min', tomorrowFormatted);
-    }
+    // Set minimum unlock date to tomorrow
+    const tomorrow = new Date();
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    const tomorrowFormatted = tomorrow.toISOString().split('T')[0];
+    document.getElementById('unlock-date').setAttribute('min', tomorrowFormatted);
 
-    if (document.getElementById('capsule-list')) {
-        loadCapsules();
-    }
+    // Load existing capsules
+    loadCapsules();
 
-    const capsuleForm = document.getElementById('capsule-form');
-    if (capsuleForm) {
-        capsuleForm.addEventListener('submit', function(e) {
-            e.preventDefault();
+   
+    document.getElementById('capsule-form').addEventListener('submit', function(e) {
+        e.preventDefault();
 
             const title = document.getElementById('title').value;
             const message = document.getElementById('message').value;
             const unlockDate = document.getElementById('unlock-date').value;
             const imageFile = document.getElementById('image').files[0];
 
-            const capsule = {
-                id: Date.now(),
-                title,
-                message,
-                unlockDate,
-                createdDate: new Date().toISOString(),
-                image: null
-            };
+        // Capsule object
+        const capsule = {
+            id: Date.now(), // Unique ID
+            title,
+            message,
+            unlockDate,
+            createdDate: new Date().toISOString(),
+            image: null
+        };
 
-            if (imageFile) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    capsule.image = e.target.result;
-                    saveCapsule(capsule);
-                };
-                reader.readAsDataURL(imageFile);
-            } else {
+        // Handle image upload
+        if (imageFile) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                capsule.image = e.target.result;
                 saveCapsule(capsule);
-            }
-        });
-    }
+            };
+            reader.readAsDataURL(imageFile);
+        } else {
+            saveCapsule(capsule);
+        }
+    });
 });
 
 function saveCapsule(capsule) {
@@ -248,8 +245,8 @@ function saveCapsule(capsule) {
     loadCapsules();
     showNotification('Time capsule created successfully!');
 
-    const capsuleForm = document.getElementById('capsule-form');
-    if (capsuleForm) capsuleForm.reset();
+    // Reset form
+    document.getElementById('capsule-form').reset();
 }
 
 function loadCapsules() {
@@ -315,8 +312,20 @@ function deleteCapsule(id) {
 
     loadCapsules();
     showNotification('Time capsule deleted successfully!');
+
+    document.addEventListener('click', function(e) {
+        if (e.target.matches('.delete-button')) {
+            alert('Are you sure you want to delete this capsule? This action cannot be undone.');
+        }
+    });
 }
 
+
+
+
+// ========================
+// Notifications
+// ========================
 function showNotification(message) {
     const notification = document.getElementById('notification');
     if (!notification) return;
@@ -328,5 +337,8 @@ function showNotification(message) {
     }, 3000);
 }
 
+// ========================
+// Expose Global Functions
+// ========================
 window.openCapsule = openCapsule;
 window.deleteCapsule = deleteCapsule;
