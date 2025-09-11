@@ -22,11 +22,21 @@
 
   <nav class="trackerNavBar">
     <button class="navButton allCapsulesBtn">All Capsules</button>
-    <button class="navButton lockedCapsulesBtn">Locked</button>
-    <button class="navButton unlockedCapsulesBtn">Unlocked</button>
+    <button class="navButton lockedCapsulesBtn"><a href="locked.html">Locked</a></button>
+    <button class="navButton unlockedCapsulesBtn"><a href="unlocked.html">Unlocked</a></button>
   </nav>
 
-  <main class="trackerList"></main>
+  <main class="trackerList">
+    <section>
+      <h3>Locked Capsules</h3>
+      <div id="locked-feed" class="feed"></div>
+    </section>
+
+    <section>
+      <h3>Unlocked Capsules</h3>
+      <div id="unlocked-feed" class="feed"></div>
+    </section>
+  </main>
 
   <nav class="bottomNav">
     <a href="home.html" class="bottomNavItem">
@@ -35,7 +45,7 @@
     <a href="tracker.html" class="bottomNavItem active">
       <i class="fa-solid fa-clock"></i>
     </a>
-    <a href="#" class="bottomNavItem">
+    <a href="notifications.html" class="bottomNavItem">
       <i class="fa-solid fa-bell"></i>
     </a>
     <a href="#" class="bottomNavItem shareIcon">
