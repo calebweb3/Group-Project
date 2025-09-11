@@ -15,15 +15,20 @@
     </div>
     <div class="profileSection">
       <div class="iconCircle">
-        <a href="#"><img id="profileImage" src="img/defaultProfile.png" alt="Profile"></a>
+        <a href="settings.html"><img id="profileImage" src="img/defaultProfile.png" alt="Profile"></a>
       </div>
     </div>
   </header>
 
   <nav class="trackerNavBar">
-    <button class="navButton allCapsulesBtn">All Capsules</button>
-    <button class="navButton lockedCapsulesBtn">Locked</button>
-    <button class="navButton unlockedCapsulesBtn">Unlocked</button>
+    <div class="navLeft">
+      <button class="navButton allCapsulesBtn">All Capsules</button>
+      <button class="navButton lockedCapsulesBtn">Locked</button>
+      <button class="navButton unlockedCapsulesBtn">Unlocked</button>
+    </div>
+    <div class="navRight">
+      <input type="text" id="trackerSearchInput" placeholder="Search capsules..." />
+    </div>
   </nav>
 
   <main class="trackerList"></main>
@@ -38,7 +43,10 @@
     <a href="#" class="bottomNavItem">
       <i class="fa-solid fa-bell"></i>
     </a>
-    <a href="#" class="bottomNavItem shareIcon">
+    <a href="create.html" class="bottomNavItem shareIcon">
+      <i class="fa-solid fa-plus"></i>
+    </a>
+    <a id="navShareBtn">
       <i class="fa-solid fa-share-nodes"></i>
     </a>
   </nav>
