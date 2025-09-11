@@ -1,2 +1,4 @@
 # Group-Project
-A Time Capsule Appy
+A Time Capsule App
+
+#The time capsule
