@@ -289,3 +289,4 @@ if (navShareBtn) {
 
 window.openCapsule = openCapsule;
 window.deleteCapsule = deleteCapsule;
+
