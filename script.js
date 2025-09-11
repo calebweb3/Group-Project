@@ -195,13 +195,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
 document.addEventListener('DOMContentLoaded', function() {
-    // Set minimum unlock date to tomorrow
+    
     const tomorrow = new Date();
     tomorrow.setDate(tomorrow.getDate() + 1);
     const tomorrowFormatted = tomorrow.toISOString().split('T')[0];
     document.getElementById('unlock-date').setAttribute('min', tomorrowFormatted);
 
-    // Load existing capsules
+    
     loadCapsules();
 
    
@@ -213,7 +213,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const unlockDate = document.getElementById('unlock-date').value;
         const imageFile = document.getElementById('image').files[0];
 
-        // Capsule object
+        
         const capsule = {
             id: Date.now(), // Unique ID
             title,
@@ -223,7 +223,7 @@ document.addEventListener('DOMContentLoaded', function() {
             image: null
         };
 
-        // Handle image upload
+        
         if (imageFile) {
             const reader = new FileReader();
             reader.onload = function(e) {
@@ -247,7 +247,7 @@ function saveCapsule(capsule) {
     loadCapsules();
     showNotification('Time capsule created successfully!');
 
-    // Reset form
+  
     document.getElementById('capsule-form').reset();
 }
 
@@ -329,9 +329,7 @@ function deleteCapsule(id) {
 
 
 
-// ========================
-// Notifications
-// ========================
+
 function showNotification(message) {
     const notification = document.getElementById('notification');
     notification.textContent = message;
@@ -342,8 +340,6 @@ function showNotification(message) {
     }, 3000);
 }
 
-// ========================
-// Expose Global Functions
-// ========================
+
 window.openCapsule = openCapsule;
 window.deleteCapsule = deleteCapsule;
