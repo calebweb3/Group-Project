@@ -340,7 +340,7 @@ function toggleNotifications() {
     }
 }
 
-// Sub Account Functions
+
 function openSubAccount() {
     const modal = document.getElementById('subAccountModal');
     modal.classList.add('active');
@@ -365,7 +365,7 @@ function deleteSubAccount() {
     }
 }
 
-// Close modal when clicking outside
+
 document.addEventListener('click', function(event) {
     const modal = document.getElementById('subAccountModal');
     if (event.target === modal) {
@@ -373,55 +373,53 @@ document.addEventListener('click', function(event) {
     }
 });
 
-// Add click effects to setting items
+
 document.addEventListener('DOMContentLoaded', function() {
     document.querySelectorAll('.setting-item').forEach(item => {
         item.addEventListener('click', function() {
-            // Check if this item is not the notification toggle or sub account
+            
             if (!this.onclick || 
                 (this.onclick.toString().indexOf('toggleNotifications') === -1 && 
                  this.onclick.toString().indexOf('openSubAccount') === -1)) {
-                // Add a simple click effect for other items
+                
                 this.style.transform = 'scale(0.98)';
                 setTimeout(() => {
                     this.style.transform = 'scale(1)';
                 }, 100);
                 
-                // You can add more functionality here for other settings
                 console.log('Clicked on: ' + this.querySelector('.setting-text').textContent);
             }
         });
     });
 });
 
-// Optional: Add functionality for other buttons
+
 function navigateBack() {
     console.log('Back button clicked');
-    // Add your navigation logic here
+    
 }
 
 function openProfile() {
     console.log('Profile clicked');
-    // Add your profile logic here
+    
 }
 
-// Add event listeners when page loads
+
 document.addEventListener('DOMContentLoaded', function() {
-    // Back button
+   
     document.querySelector('.back-icon').addEventListener('click', navigateBack);
     
-    // Profile picture
+    
     document.querySelector('.profile-pic').addEventListener('click', openProfile);
     
-    // Bottom navigation icons
+    
     document.querySelectorAll('.nav-icon').forEach((icon, index) => {
         icon.addEventListener('click', function() {
-            // Remove active class from all icons
+           
             document.querySelectorAll('.nav-icon').forEach(i => i.classList.remove('active'));
-            // Add active class to clicked icon
+            
             this.classList.add('active');
             
-            // Handle different navigation items
             switch(index) {
                 case 0:
                     window.location.href = 'home.html'; 
