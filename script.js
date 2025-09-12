@@ -323,7 +323,6 @@ if (navShareBtn) {
 }
 window.openCapsule = openCapsule;
 window.deleteCapsule = deleteCapsule;
-<<<<<<< HEAD
 
 
 let notificationsEnabled = true;
@@ -441,6 +440,3 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
-=======
-window.shareCapsule = shareCapsule;
->>>>>>> 320e1f9f26aec496993d6fa489da822e035779fc
