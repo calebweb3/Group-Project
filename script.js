@@ -408,7 +408,7 @@ function loadCapsules() {
         capsuleElement.innerHTML = `
             <div class="capsule-title">${capsule.title}</div>
             <div class="capsule-date">Created: ${createdDate} | Unlocks: ${unlockDate}</div>
-            
+          
            
             <button onclick="openCapsule(${capsule.id})">View Capsule</button>
             <button onclick="deleteCapsule(${capsule.id})" 
